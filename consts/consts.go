@@ -10,7 +10,7 @@ const (
 	FLOAT   ParamType = "Float32"
 	DOUBLE  ParamType = "Float64"
 	INT32   ParamType = "Int32"
-	INT64   ParamType = "INT64"
+	INT64   ParamType = "Int64"
 	STRING  ParamType = "String"
 	ENUM    ParamType = "Enum"
 	MESSAGE ParamType = "Msg"
