@@ -62,12 +62,11 @@ func switchType(ft descriptorpb.FieldDescriptorProto_Type) consts.ParamType {
 //	@param paramType
 //	@param label
 //	@return string
-func GetParamType(paramType consts.ParamType, label descriptorpb.FieldDescriptorProto_Label) string {
+func GetParamType(paramType string, label descriptorpb.FieldDescriptorProto_Label) string {
 	var typeName string
-	if paramType != consts.Null {
-		if label == descriptorpb.FieldDescriptorProto_LABEL_REPEATED {
-			typeName = fmt.Sprintf("Array of %s", string(typeName))
-		}
+	typeName = string(paramType)
+	if label == descriptorpb.FieldDescriptorProto_LABEL_REPEATED {
+		typeName = fmt.Sprintf("Array of %s", string(typeName))
 	}
 	return string(typeName)
 }
