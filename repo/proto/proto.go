@@ -11,15 +11,12 @@ import (
 //	@param files
 //	@return []api.ExportApis
 //	@return error
-func ReflectProtos(files ...*desc.FileDescriptor) ([]api.ExportApis, error) {
+func ReflectProtos(files ...*desc.FileDescriptor) []api.ExportApis {
 	var apis []api.ExportApis
 	for _, file := range files {
 		desc := reflect.NewFileDescriptor(file)
-		descApi, err := desc.GetAllApis()
-		if err != nil {
-			panic(err)
-		}
+		descApi := desc.GetAllApis()
 		apis = append(apis, descApi...)
 	}
-	return apis, nil
+	return apis
 }

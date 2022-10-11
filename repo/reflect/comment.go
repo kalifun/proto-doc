@@ -2,6 +2,7 @@ package reflect
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/kalifun/proto-doc/entity/api"
 	"gopkg.in/yaml.v3"
@@ -43,7 +44,8 @@ func ConversionFieldComments(msg string) api.Param {
 	comments := make(map[string]string)
 	err := yaml.Unmarshal([]byte(msg), &comments)
 	if err != nil {
-		param.Desc = msg
+		param.Desc = strings.ReplaceAll(strings.TrimSpace(msg), "\n", "")
+		param.Required = "UNKNOW"
 		return param
 	}
 
@@ -54,7 +56,7 @@ func ConversionFieldComments(msg string) api.Param {
 	}
 
 	if v, ok := comments["Desc"]; ok {
-		param.Desc = v
+		param.Desc = strings.ReplaceAll(strings.TrimSpace(v), "\n", "")
 	}
 
 	return param
