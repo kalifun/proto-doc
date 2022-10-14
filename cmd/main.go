@@ -2,16 +2,34 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"os"
 	"strings"
 	"sync"
 
 	"github.com/jhump/protoreflect/desc/protoparse"
 	"github.com/kalifun/proto-doc/repo/export"
 	"github.com/kalifun/proto-doc/repo/proto"
+	"github.com/spf13/cobra"
 )
 
-func main() {
+var rootCmd = &cobra.Command{
+	Use:   "proto-doc",
+	Short: "proto-doc is a tool for proto files",
+	Long:  `proto-doc is a tool for generating documentation and annotations from proto files`,
+	Run: func(cmd *cobra.Command, args []string) {
+		Error(cmd, args, errors.New("unrecognized command"))
+	},
+}
 
+func Error(cmd *cobra.Command, args []string, err error) {
+	fmt.Fprintf(os.Stderr, "execute %s args:%v error:%v\n", cmd.Name(), args, err)
+	os.Exit(1)
+}
+
+func main() {
+	rootCmd.AddCommand(cmdDoc)
+	rootCmd.Execute()
 }
 
 func reflectProto(path string) error {

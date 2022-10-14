@@ -1,2 +1,3 @@
-*.proto
-*.md
+cmd/*.proto
+cmd/*.md
+cmd/cmd.exe
