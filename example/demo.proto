@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+// @desc: user service
+service UserService {
+   /**
+      @path: /api/v1/describe_users
+      @desc: try get user info
+      @method: post
+      @version: v1
+   */
+   rpc DescribeUsers (DescribeUsersReq) returns (UserList);   
+}
+
+
+// @desc: describe user req
+message DescribeUsersReq {
+   /**
+      @desc: UserIds filter user ids
+      @required: false
+   */
+   repeated int64 UserIds = 1;
+}
+
+
+// @desc: user list
+message UserList {
+   /**
+      @desc: Total get all users count
+      @required: true
+   */
+   int64 Total = 1;
+   /**
+      @desc: User List
+      @required: true
+   */
+   repeated User User = 2;
+}
+
+
+// @desc: User info
+message User {
+   /**
+      @desc: UserId Description
+      @required: true
+   */
+   int64 UserId = 1;
+   /**
+      @desc: User Name 
+      @required: true
+   */
+   string UserName = 2;
+   /**
+      @desc: User Status 
+      @required: true
+   */
+   UserStatus UserStatus = 3;
+}
+
+
+
+// @desc:  user status
+enum UserStatus {
+   // unlock  Unavailable
+   UnLock = 0;
+   // lock   Available
+   Lock = 1;
+}
