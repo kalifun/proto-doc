@@ -32,7 +32,13 @@ func main() {
 	rootCmd.Execute()
 }
 
-func reflectProto(path string) error {
+type protoImp struct {
+	inputPath  string
+	outputPath string
+	language   string
+}
+
+func (pi protoImp) reflectProto() error {
 	// from google api linter
 	var errorsWithPos []protoparse.ErrorWithPos
 	var lock sync.Mutex
@@ -48,7 +54,7 @@ func reflectProto(path string) error {
 		},
 	}
 
-	fd, err := p.ParseFiles(path)
+	fd, err := p.ParseFiles(pi.inputPath)
 	if err != nil {
 		if err == protoparse.ErrInvalidSource {
 			if len(errorsWithPos) == 0 {
@@ -63,6 +69,7 @@ func reflectProto(path string) error {
 		}
 	}
 	apis := proto.ReflectProtos(fd...)
-	export.GenMarkdown(apis)
-	return nil
+	md := export.NewMarkdown(export.SetLanguage(pi.language),
+		export.SetOutPath(pi.outputPath))
+	return md.GenMarkdown(apis)
 }

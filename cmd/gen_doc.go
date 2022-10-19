@@ -10,12 +10,15 @@ import (
 
 var protoPath string
 var outPath string
+var language string
 
 func init() {
 	// proto 文件路径
 	cmdDoc.PersistentFlags().StringVar(&protoPath, "proto", ".", "proto files (default is .)")
 	// doc 导出路径
-	cmdDoc.PersistentFlags().StringVar(&protoPath, "out", ".", "export document path (default is .)")
+	cmdDoc.PersistentFlags().StringVar(&outPath, "out", ".", "export document path (default is .)")
+	// doc 导出采用的模板语言
+	cmdDoc.PersistentFlags().StringVar(&language, "language", "en", "export document template language (default is en)")
 }
 
 var cmdDoc = &cobra.Command{
@@ -27,6 +30,23 @@ var cmdDoc = &cobra.Command{
 }
 
 func genDoc(cmd *cobra.Command, args []string) {
+	pi := protoImp{
+		inputPath:  "",
+		outputPath: outPath,
+		language:   language,
+	}
+
+	for _, file := range getFiles(protoPath) {
+		pi.inputPath = file
+		err := pi.reflectProto()
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func getFiles(protoPath string) []string {
+	paths := []string{}
 	if protoPath == "." {
 		currentPath, err := os.Getwd()
 		if err != nil {
@@ -34,21 +54,12 @@ func genDoc(cmd *cobra.Command, args []string) {
 		}
 		files := walkProto(protoPath)
 		for _, file := range files {
-			err := reflectProto(path.Join(currentPath, file))
-			if err != nil {
-				panic(err)
-			}
-		}
-	}
-	if protoPath != "" {
-		err := reflectProto(protoPath)
-		if err != nil {
-			panic(err)
+			paths = append(paths, path.Join(currentPath, file))
 		}
 	} else {
-		panic("未找到proto文件")
+		paths = append(paths, protoPath)
 	}
-
+	return paths
 }
 
 // walkProto
