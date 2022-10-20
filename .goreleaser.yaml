@@ -1,2 +1,6 @@
 builds:
   - main: ./cmd
+    goos:
+      - linux
+      - darwin
+      - windows
