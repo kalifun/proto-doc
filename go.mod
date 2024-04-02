@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/jhump/protoreflect v1.14.1
 	github.com/spf13/cobra v1.6.0
-	google.golang.org/protobuf v1.28.1
+	google.golang.org/protobuf v1.33.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
